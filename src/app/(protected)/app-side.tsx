@@ -29,6 +29,17 @@ const items =[
         icon: CreditCard
     }
 ]
+const projects = [
+    {
+        title:"Project 1",
+    },
+    {
+        title:"Project 2",
+    },
+    {
+        title: 'Project 3'
+    }
+]
 export function AppSidebar(){
     const pathname = usePathname();
     return (
@@ -61,6 +72,33 @@ export function AppSidebar(){
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+            <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
+            <SidebarGroupContent>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                      {
+                        projects.map(project =>{
+                            return(
+                                <SidebarMenuButton key={project.title}>
+                                    <SidebarMenuButton asChild>
+                                     <div>
+                                        <div className={cn('rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary',
+                                            {'bg-primary text-white': true}
+                                        )}>
+                                          {project.title[0]}  
+                                        </div>
+                                        <span>{project.title}</span>
+                                     </div>
+                                    </SidebarMenuButton>
+                                </SidebarMenuButton>
+                            )
+                        })
+                      }
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
