@@ -37,7 +37,22 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+            <div className="h-4">
+               <div className="flex items-center gap-4">
+                 TeamMembers
+                 Invitations
+                 Archive
+               </div>
+            </div>
            </div>
+           <div className="mt-4">
+             <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
+                  Ask a Question
+                  Meeting
+             </div>
+           </div>
+           <div className="mt-8"></div>
+           commits logs
        </div>
     ) 
 };
