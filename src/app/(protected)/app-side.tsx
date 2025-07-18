@@ -7,6 +7,7 @@ import { Bot, CreditCard, LayoutDashboardIcon, Plus, Presentation } from "lucide
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import useProject from "@/hooks/use-project";
 
 const items =[
     {
@@ -30,20 +31,11 @@ const items =[
         icon: CreditCard
     }
 ]
-const projects = [
-    {
-        title:"Project 1",
-    },
-    {
-        title:"Project 2",
-    },
-    {
-        title: 'Project 3'
-    }
-]
+
 export function AppSidebar(){
     const pathname = usePathname();
     const {open}= useSidebar();
+    const {projects,project,projectId,setProjectId} = useProject();
     return (
     <Sidebar collapsible="icon" variant="floating">
       <SidebarHeader>
@@ -84,17 +76,17 @@ export function AppSidebar(){
                 <SidebarMenu>
                     <SidebarMenuItem>
                       {
-                        projects.map(project =>{
+                        projects?.map(project =>{
                             return(
-                                <SidebarMenuButton key={project.title}>
+                                <SidebarMenuButton key={project.name}>
                                     <SidebarMenuButton asChild>
                                      <div>
                                         <div className={cn('rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary',
-                                            {'bg-primary text-white': true}
+                                            {'bg-primary text-white': project.id === projectId}
                                         )}>
-                                          {project.title[0]}  
+                                          {project.name[0]}  
                                         </div>
-                                        <span>{project.title}</span>
+                                        <span>{project.name}</span>
                                      </div>
                                     </SidebarMenuButton>
                                 </SidebarMenuButton>
