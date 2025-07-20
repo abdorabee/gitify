@@ -33,6 +33,7 @@ model Project {
     repositoryUrl String
   
     userToProjects UserToProject[]
+    commits commit[]
 }
 
 model UserToProject {
@@ -45,4 +46,22 @@ model UserToProject {
 
     user User @relation(fields: [userId], references: [id])
     project Project @relation(fields: [projectId], references: [id])
+}
+
+model commit { 
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    deletedAt DateTime @updatedAt
+    
+    projectId String
+    project Project @relation(fields: [projectId], references: [id])
+
+    commitMessage String
+    commitHash String
+    commitAuthorAvatar String
+    commitAuthorName String
+    commitDate DateTime
+
+    summary String
 }
