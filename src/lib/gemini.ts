@@ -3,7 +3,7 @@ import {GoogleGenerativeAI} from "@google/generative-ai";
 const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const model = genai.getGenerativeModel({model: "gemini-2.0-flash-exp"});
 
-export const summarizeCommit = async (diff:string) => {
+export const aiSummarizeCommit = async (diff:string) => {
  // https://github.com/docker/genai-stack/commit/<commitHash>.diff
  const response = await model.generateContent([
     `You are an expert software engineer , and you are tying to summarize a git diff.
@@ -37,3 +37,21 @@ export const summarizeCommit = async (diff:string) => {
  ])
  return response.response.text();
 }
+
+console.log(await aiSummarizeCommit(`
+   diff --git a/prisma/schema.prisma b/prisma/schema.prisma
+index 5f4b263..c13c41b 100644
+   --- a/prisma/schema.prisma
+   +++ b/prisma/schema.prisma
+   @@ -13,8 +13,8 @@ datasource db {
+    model User {
+    id      String @id @default(cuid())
+    email   String @unique
+-   firstName string
+-   lastName string
++   firstName string
++   lastName string
+    imageUrl string
+
+    stripeSubscriptionId string?
+   `))
