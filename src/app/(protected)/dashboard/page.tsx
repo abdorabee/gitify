@@ -1,12 +1,32 @@
 'use client';
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import useProject from "@/hooks/use-project";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, RefreshCw } from "lucide-react";
 import CommitLog from "./commit-log";
+import { api } from "@/trpc/react";
 
 const Dashboard = () => {
-    const {project} = useProject();
+    const {project, projectId} = useProject();
+    const [isPolling, setIsPolling] = useState(false);
+    const pollCommitsMutation = api.project.pollCommits.useMutation();
+    const utils = api.useUtils();
+    
+    const handlePollCommits = async () => {
+        if (!projectId) return;
+        
+        setIsPolling(true);
+        try {
+            const result = await pollCommitsMutation.mutateAsync({ projectId });
+            console.log(`Successfully polled ${result.count} commits`);
+            // Refresh the commits data
+            await utils.project.getCommits.invalidate({ projectId });
+        } catch (error) {
+            console.error('Error polling commits:', error);
+        } finally {
+            setIsPolling(false);
+        }
+    };
     
     if (!project) {
         return (
@@ -42,6 +62,14 @@ const Dashboard = () => {
             </div>
             <div className="h-4">
                <div className="flex items-center gap-4">
+                 <button
+                    onClick={handlePollCommits}
+                    disabled={isPolling}
+                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                 >
+                    <RefreshCw className={`size-4 ${isPolling ? 'animate-spin' : ''}`} />
+                    {isPolling ? 'Fetching Commits...' : 'Fetch Commits'}
+                 </button>
                  TeamMembers
                  Invitations
                  Archive

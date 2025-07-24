@@ -40,7 +40,8 @@ export const getCommitHash = async (githubUrl: string): Promise<Response[]>=>{
    }))
 }
 
-console.log(await getCommitHash(githubUrl))
+// Example usage (commented out to prevent execution during module loading):
+// console.log(await getCommitHash(githubUrl))
 
 
 export const pollCommits = async (projectId:string) => {
@@ -112,4 +113,5 @@ async function filterUnprocessedCommits(projectId:string , commitHashes:Response
 
 }
 
-await pollCommits('cm3ah9p7x0000on1c0mkvs2hz').then(console.log)
+// Example usage (commented out to prevent execution during module loading):
+// await pollCommits('cm3ah9p7x0000on1c0mkvs2hz').then(console.log)
