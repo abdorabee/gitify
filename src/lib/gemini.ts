@@ -1,4 +1,5 @@
 import {GoogleGenerativeAI} from "@google/generative-ai";
+import {Document} from "@langchain/core/documents";
 
 const genai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const model = genai.getGenerativeModel({model: "gemini-2.0-flash-exp"});
@@ -55,3 +56,32 @@ index 5f4b263..c13c41b 100644
 
     stripeSubscriptionId string?
    `))
+
+
+export async function summarizeCode(doc:Document){
+  console.log("getting summary for",doc.metadata.source);
+  const code = doc.pageContent.slice(0,1000);
+  const response = await model.generateContent([
+   `You are an expert senior software engineer who specializes in aboarding junior software engineers onto projects`,
+   `You are anboarding a junior software engineer and explaining to them the purpose of the code${doc.metadata.source} file
+   Here is the code:
+   ====
+   ${code}
+   ====
+            Give a summary no more than 100 words of the code above
+   `,
+]) 
+return response.response.text();
+}
+
+
+export async function generateEmbedding(summary: string) {
+    const embeddingModel = genai.getGenerativeModel({
+      model: 'text-embedding-004'
+    })
+    const result = await embeddingModel.embedContent(summary);
+    const embedding = result.embedding.values;
+    return embedding;
+}
+
+console.log(await generateEmbedding("this is a test"))
